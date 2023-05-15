@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react'
 import { Button, Input } from "@rneui/themed";
 import { auth, db } from "../firebase";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const [user, setUser] = useState({})
   const [grade, setGrade] = useState()
   const [school, setSchool] = useState()
