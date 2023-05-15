@@ -31,6 +31,7 @@ const UserSignUpScreen = ({navigation}) => {
                 console.log("password:",pswd )
 
                 console.log("Update successful");
+                navigation.navigate('User Login')
                 // ...
               })
               .catch((error) => {
