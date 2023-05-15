@@ -16,6 +16,7 @@ const UserLoginScreen = ({ navigation }) => {
         var user = userCredential.user;
         // navigation.navigate("User BottomTab")
           console.log("Logged in", user)
+          navigation.navigate('User BottomTab')
       })
       .catch((error) => {
         var errorCode = error.code;
