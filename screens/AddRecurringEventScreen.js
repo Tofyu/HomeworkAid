@@ -1,6 +1,6 @@
-import { StyleSheet, Text, TextInput, View ,CheckBox} from 'react-native'
+import { StyleSheet, Text, TextInput, View} from 'react-native'
 import React , { useState } from 'react'
-import { Button, Input } from "@rneui/themed";
+import { Button, Input,CheckBox } from "@rneui/themed";
 
 // import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -44,87 +44,76 @@ const AddRecurringEventScreen = () => {
     <View>
         
       <Text style = {styles.title}>AddRecurringEventScreen</Text>
-       <TextInput
+      <Input
+        style = {styles.input}
+        size="small"
+        placeholder="[Enter Event Name]"
         value={inputName}
-        placeholder="Name: "
         onChangeText={text => setInputName(text)} 
       />
-      {/* <TextInput>
-        value={startDate}
-        placeholder="Start Date: "
-        onChangeText={text => setInputStart(text)}
-      </TextInput> */}
-      
-      {/* <DateTimePicker
-    testID="dateTimePicker"
-    value={startDate}
-    mode={'date'}
-    is24Hour={true}
-    display="default"
-    
-  /> */}
-
-        
-        
-       <TextInput
+       <Input
+        style={styles.input}
+        size="small"
         value={inputStart}
-        placeholder="Start Date: "
+        placeholder="[Enter Event Start Date] "
         onChangeText={text => setInputStart(text)}
       />
-      <TextInput
+      <Input
+        style={styles.input}
+        size="small"
         value={inputNotes}
-        placeholder="Notes "
+        placeholder="[Enter Event Notes]"
         onChangeText={text => setInputNotes(text)}
       />
         <View style={{flexDirection:"row"}}>
         <CheckBox
+          title="Sunday"
           value={isSunday}
           onValueChange={() => setIsSunday(!isSunday)}
         />
-        <Text>     Sunday</Text>
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
+          title="Monday"
           value={isMonday}
           onValueChange={() => setIsMonday(!isMonday)}
         />
-          <Text>     Monday</Text>
         </View>
         
         <View style={{flexDirection:"row"}}>
         <CheckBox
+          title="Tuesday"
           value={isTuesday}
           onValueChange={() => setIsTuesday(!isTuesday)}
         />
-          <Text>     Tuesday</Text>
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
+          title="Wednesday"
           value={isWednesday}
           onValueChange={() => setIsWednesday(!isWednesday)}
         />
-          <Text>     Wednesday</Text>
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
+          title="Thursday"
           value={isThursday}
           onValueChange={() => setIsThursday(!isThursday)}
         />
-          <Text>     Thursday</Text>
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
+          title="Friday"
           value={isFriday}
           onValueChange={() => setIsFriday(!isFriday)}
         />
-          <Text>     Friday</Text>
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
+          title="Saturday"
           value={isSaturday}
           onValueChange={() => setIsSaturday(!isSaturday)}
         />
-          <Text>     Saturday</Text>
         </View>
         
         

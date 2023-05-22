@@ -1,6 +1,8 @@
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React , { useState, useEffect } from 'react'
 import {db} from '../firebase'
+import { Button, Input } from "@rneui/themed";
+
 // import DatePicker from 'react-native-datepicker';
 
 
@@ -45,27 +47,37 @@ const EditEventScreen = () => {
       };
   return (
     <View>
-            <Text style = {styles.title}>AddRecurringEventScreen</Text>
+            <Text style = {styles.title}>Edit Event Screen</Text>
 
-      <TextInput
+
+            <Input
+        style = {styles.input}
+        size="small"
+        placeholder="[Enter Event Name]"
         value={inputName}
-        placeholder="Name: "
         onChangeText={text => setInputName(text)} 
       />
-      {/* <DatePicker selected={startTime} onChange={(date) => setStartTime(date)} />
-      <DatePicker selected={endTime} onChange={(date) => setEndTime(date)} />   */}
-       <TextInput
+       <Input
+        style={styles.input}
+        size="small"
         value={inputStart}
-        placeholder="Start Date: "
+        placeholder="[Enter Event Start Date] "
         onChangeText={text => setInputStart(text)}
       />
-      <TextInput
+      <Input
+        style={styles.input}
+        size="small"
         value={inputNotes}
-        placeholder="Notes "
+        placeholder="[Enter Event Notes]"
         onChangeText={text => setInputNotes(text)}
       />
       
-      <Button colorScheme="red" placeholder="Save Changes " onPress={updateEvent} ml={3}></Button>
+      <Button title="Update Event" 
+        buttonStyle={{ backgroundColor: 'rgba(39, 213, 245, 0.8)', borderRadius: 15 }} 
+        titleStyle={{ fontWeight: 'bold', fontSize: 16 }} 
+        icon={{name: 'calendar',type: 'font-awesome',size: 15,color: 'white',}}
+        onPress={updateEvent} 
+        style={{ padding: 10, marginVertical: 5, width: 370 }} />
     </View>
   )
 }
