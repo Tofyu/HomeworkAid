@@ -34,6 +34,14 @@ const ScheduleScreen = () => {
         });
         console.log('3 useEffect finish db')
       })
+      // db.collection("users").doc("YEuRehNNhMMQdrsqGWyi").collection("recurringEvents")
+      // .onSnapshot((querySnapshot) => {
+      //   querySnapshot.forEach((doc) => {
+      //     console.log(doc.data());
+      //     activitiesFromDB.push({ id: doc.id, title:doc.data().name, dueDate: });
+      //   });
+      //   console.log('3 useEffect finish db')
+      // })
         db.collection("users").doc("YEuRehNNhMMQdrsqGWyi").collection("events")
         .onSnapshot((querySnapshot) => {
           querySnapshot.forEach((doc) => {
@@ -56,10 +64,15 @@ const ScheduleScreen = () => {
             return acc;
           }, []);
 
-          console.log("3.2************", groupedData)
-        setHomeworks(groupedData);
+          // Sort by date
+        const sortedData = groupedData.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate)); // Sort by due date
+
+        console.log('3.2************', sortedData);
+        setHomeworks(sortedData);
+          
         console.log('4 useEffect end')
       })  
+        
         }
 
     const renderItem = ({ item }) => <Item name={item.name + "            " + item.time} />;
