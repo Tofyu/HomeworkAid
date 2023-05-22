@@ -1,6 +1,8 @@
-import { StyleSheet, Button, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import {db} from '../firebase'
+import { Button, Input } from '@rneui/themed';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import firebase from "firebase/app";
 
 const EditHomeworkScreen = ( {navigation} ) => {
@@ -56,38 +58,34 @@ const EditHomeworkScreen = ( {navigation} ) => {
     return (
       <ImageBackground source = {require('../assets/background_bottom.png')} resizeMode="cover" style= 
       {{flex: 1, width: '100%', height:'100%'}}>
-        <View>
-          <Text style={styles.text1} > Title </Text>
-          <TextInput
-           style={styles.text2} 
+        <View styles={styles.content}>
+
+          <Input
+           style={styles.input} 
             placeholder="[Enter Title]"
             label="Title"
             value = {title}
             onChangeText = {setTitle}
           />
          
-         <Text style={styles.text1} > Start Date </Text>
-          <TextInput
-           style={styles.text2} 
+          <Input
+           style={styles.input} 
             placeholder="[Enter Start Date MM DD, YY]"
             label="Start Date"
             value = {startDate}
             onChangeText = {setStartDate}
           />
         
-
-         <Text style={styles.text1} > Due Date </Text>
-          <TextInput
-           style={styles.text2} 
+          <Input
+           style={styles.input} 
             placeholder="[Enter Due Date MM DD, YY]"
             label="Due Date"
             value = {dueDate}
             onChangeText = {setDueDate}
           />
         
-         <Text style={styles.text1} > Difficulty </Text>
-         <TextInput
-          style={styles.text2} 
+         <Input
+          style={styles.input} 
             placeholder="[Enter number 1 (lowest) - 5 (highest)]"
             label="Difficulty"
             value = {difficulty}
@@ -95,36 +93,32 @@ const EditHomeworkScreen = ( {navigation} ) => {
             keyboardType = "numeric"
           />
 
-        <Text style={styles.text1} > Type </Text>
-        <TextInput
-         style={styles.text2} 
+        <Input
+         style={styles.input} 
             placeholder="[Enter Type]"
             label="Type"
             value = {type}
             onChangeText = {setType}
           />
           
-          <Text style={styles.text1} > Subject </Text>  
-        <TextInput
-         style={styles.text2} 
+        <Input
+         style={styles.input} 
             placeholder="[Enter Subject]"
             label="Subject"
             value = {subject}
             onChangeText = {setSubject}
           />
 
-        <Text style={styles.text1} > Time Needed </Text>  
-        <TextInput
-         style={styles.text2} 
+        <Input
+         style={styles.input} 
             placeholder="[Enter number of minutes needed]"
             label="Time Needed"
             value = {timeNeeded}
             onChangeText = {setTimeNeeded}
           />
 
-        <Text style={styles.text1} > Priority </Text>  
-        <TextInput
-         style={styles.text2} 
+        <Input
+         style={styles.input} 
             placeholder="[Enter number 1 (lowest) - 5 (highest)]"
             label="Priority"
             value = {priority}
@@ -132,27 +126,30 @@ const EditHomeworkScreen = ( {navigation} ) => {
             keyboardType = "numeric"
           />
 
-        <Text style={styles.text1} > Notes </Text> 
-        <TextInput
-         style={styles.text2} 
+        <Input
+         style={styles.input} 
             placeholder="[Any notes or reminders?]"
             label="Notes"
             value = {note}
             onChangeText = {setNote}
           />
 
-          <View style={{alignItems:'center'}}>
+<View style={styles.buttonContainer}>
           <Button 
-          buttonStyle={{ backgroundColor: 'rgba(39, 213, 245, 0.8)', borderRadius: 15 }} 
-          titleStyle={{ fontWeight: 'bold', fontSize: 25 }} 
-          style={{ padding: 10, marginVertical: 5, width: 370 }}
-          title="Edit Homework" onPress={editHomework} />
+        title="Edit Homework" 
+        buttonStyle={{ backgroundColor: 'rgba(39, 213, 245, 0.8)', borderRadius: 15 }} 
+        titleStyle={{ fontWeight: 'bold', fontSize: 15 }} 
+        icon={{name: 'pencil-square',type: 'font-awesome',size: 15,color: 'white',}}
+        onPress={editHomework} 
+        style={{ padding: 10, marginVertical: 5, width: 200 }} />
 
-          <Button 
-          buttonStyle={{ backgroundColor: 'rgba(39, 213, 245, 0.8)', borderRadius: 15 }} 
-          titleStyle={{ fontWeight: 'bold', fontSize: 25 }} 
-          style={{ padding: 10, marginVertical: 5, width: 370 }}
-          title="Cancel" onPress={()=>navigation.navigate('Home')}/>
+<Button 
+        title="Cancel" 
+        buttonStyle={{ backgroundColor: 'rgba(39, 213, 245, 0.8)', borderRadius: 15 }} 
+        titleStyle={{ fontWeight: 'bold', fontSize: 15 }} 
+        icon={{name: 'arrow-circle-left',type: 'font-awesome',size: 15,color: 'white',}}
+        onPress={() => navigation.navigate('Home')}
+        style={{ padding: 10, marginVertical: 5, width: 200 }} />
           </View>
         </View>
         </ImageBackground>
@@ -187,5 +184,33 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingLeft: 10,
     justifyContent: 'center'
-  }
+  },
+  container: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  content: {
+    flex: 1,
+    marginTop:60,
+    paddingTop: 40,
+    paddingHorizontal: 20,
+  },
+  input: {
+    marginBottom: 2,
+    // Adjust the height and font size to make the input smaller
+    height: 30,
+    fontSize: 14,
+  },
+  buttonContainer: {
+    flex:1,
+    flexDirection:'row',
+    marginTop: 20,
+    justifyContent:'space-around'
+
+  },
+  button: {
+    marginBottom: 10,
+    width: 200,
+  },
 })
