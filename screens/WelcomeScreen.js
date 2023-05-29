@@ -70,7 +70,7 @@ const WelcomeScreen = () => {
                         <Text style={styles.statLabel}>Total homework time</Text>
                         <Text style={styles.statValueCircle}>{time}</Text>
                     </View>
-                    
+
                     <View style={styles.statItem}>
                         <Text style={styles.statLabel}>Total assignments</Text>
                         <Text style={styles.statValueCircle}>{homeworks.length}</Text>
@@ -81,6 +81,10 @@ const WelcomeScreen = () => {
                     <Text style={styles.dueSoonTitle}>Due Soon:</Text>
                     <FlatList data={dueSoon} renderItem={renderItem} keyExtractor={(item) => item.id} />
                 </View>
+
+                <TouchableOpacity style = {{backgroundColor:'#d1f8ff'}}>
+                    <Text style = {styles.text1}>To Home Screen</Text>
+                </TouchableOpacity>
             </View>
         </ImageBackground>
     )
