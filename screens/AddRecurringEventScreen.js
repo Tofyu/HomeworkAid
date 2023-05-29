@@ -27,7 +27,13 @@ const AddRecurringEventScreen = () => {
         name: inputName,
         notes: inputNotes,
         recurring: true,
-        isSunday: isSunday
+        isSunday: isSunday,
+        isMonday: isMonday,
+        isTuesday: isTuesday,
+        isWednesday: isWednesday,
+        isThursday: isThursday,
+        isFriday: isFriday,
+        isSaturday: isSaturday
       };
       db
         .collection("users")
@@ -35,7 +41,7 @@ const AddRecurringEventScreen = () => {
         .collection("recurringEvents")
         .add(newEvent)
         .then(() => {
-          console.log("Event is added");
+          console.log("Recurring Event is added");
           
         });
     };
