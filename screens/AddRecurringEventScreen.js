@@ -13,6 +13,8 @@ const AddRecurringEventScreen = () => {
     const [inputNotes, setInputNotes] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+
+    
     const [isSunday, setIsSunday] = useState(false);
     const [isMonday, setIsMonday] = useState(false);
     const [isTuesday, setIsTuesday] = useState(false);
@@ -74,51 +76,52 @@ const AddRecurringEventScreen = () => {
         <View style={{flexDirection:"row"}}>
         <CheckBox
           title="Sunday"
-          value={isSunday}
-          onValueChange={() => setIsSunday(!isSunday)}
+          checked={isSunday}
+          onPress={() => setIsSunday(!isSunday)}
         />
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
           title="Monday"
-          value={isMonday}
-          onValueChange={() => setIsMonday(!isMonday)}
+          checked={isMonday}
+          onPress={() => setIsMonday(!isMonday)}
         />
         </View>
         
         <View style={{flexDirection:"row"}}>
         <CheckBox
           title="Tuesday"
-          value={isTuesday}
-          onValueChange={() => setIsTuesday(!isTuesday)}
+          checked={isTuesday}
+          
+          onPress={() => setIsTuesday(!isTuesday)}
         />
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
           title="Wednesday"
-          value={isWednesday}
-          onValueChange={() => setIsWednesday(!isWednesday)}
+          checked={isWednesday}
+          onPress={() => setIsWednesday(!isWednesday)}
         />
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
           title="Thursday"
-          value={isThursday}
-          onValueChange={() => setIsThursday(!isThursday)}
+          checked={isThursday}
+          onPress={() => setIsThursday(!isThursday)}
         />
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
           title="Friday"
-          value={isFriday}
-          onValueChange={() => setIsFriday(!isFriday)}
+          checked={isFriday}
+          onPress={() => setIsFriday(!isFriday)}
         />
         </View>
         <View style={{flexDirection:"row"}}>
         <CheckBox
           title="Saturday"
-          value={isSaturday}
-          onValueChange={() => setIsSaturday(!isSaturday)}
+          checked={isSaturday}
+          onPress={() => setIsSaturday(!isSaturday)}
         />
         </View>
         
