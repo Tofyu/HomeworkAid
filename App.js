@@ -69,6 +69,14 @@ const BottomTab = () =>{
           ),
         }}
         />
+        <Tab.Screen name="Profile" component={ProfileScreen} options={{
+          headerShown: false,
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" color={color} size={size} />
+          ),
+        }}
+        />
       </Tab.Navigator>
   )
 }
