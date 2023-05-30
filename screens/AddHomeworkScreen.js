@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View, ImageBackground } from 'react-native'
 import React, {useState} from 'react'
 import {db} from '../firebase'
-import { Button, Input } from '@rneui/themed';
+import { Button, Input, Slider } from '@rneui/themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firebase from "firebase/app";
 
 const AddHomeworkScreen = ( {navigation} ) => {
   const [title, setTitle] = useState('')
-  const [dueDate, setDueDate] = useState('')
-  const [startDate, setStartDate] = useState('')
+  const [dueDate, setDueDate] = useState(new Date())
+  const [startDate, setStartDate] = useState(new Date())
   const [difficulty, setDifficulty] = useState('')
   const [type, setType] = useState('')
   const [subject, setSubject] = useState('')
@@ -41,6 +41,16 @@ const AddHomeworkScreen = ( {navigation} ) => {
     });
   }
 
+  const handleSliderChange = (value) => {
+    const newDifficulty = Number(value); // Convert the value to a number
+    setDifficulty(newDifficulty);
+  };
+
+  const handleSliderChange2 = (value) => {
+    const newPriority = Number(value); // Convert the value to a number
+    setPriority(newPriority);
+  };
+
 
     return (
       <ImageBackground source = {require('../assets/background_bottom.png')} resizeMode="cover" style= 
@@ -64,7 +74,7 @@ const AddHomeworkScreen = ( {navigation} ) => {
         />
         
 
-         <Text style={styles.text1}> Due Date </Text>
+         <Text style={styles.text2}> Due Date </Text>
          <DateTimePicker
           testID="dateTimePicker"
           value={dueDate}
@@ -72,15 +82,6 @@ const AddHomeworkScreen = ( {navigation} ) => {
           is24Hour={true}
           display="default"
         />
-        
-         <Input
-          style={styles.input}
-            placeholder="[Enter number 1 (lowest) - 5 (highest)]"
-            label="Difficulty"
-            value = {difficulty}
-            onChangeText = {setDifficulty}
-            keyboardType = "numeric"
-          />
 
         <Input
          style={styles.input}
@@ -106,14 +107,34 @@ const AddHomeworkScreen = ( {navigation} ) => {
             onChangeText = {setTimeNeeded}
           />
 
-        <Input
-         style={styles.input}
-            placeholder="[Enter number 1 (lowest) - 5 (highest)]"
-            label="Priority"
-            value = {priority}
-            onChangeText = {setPriority}
-            keyboardType = "numeric"
+<View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text2}>Difficulty</Text>
+          <Slider
+            style={styles.slider}
+            value={difficulty}
+            minimumValue={1}
+            maximumValue={5}
+            step={1}
+            onValueChange={handleSliderChange}
+            thumbStyle={{ height: 20, width: 20 }}
           />
+          <Text style={[styles.input, { marginLeft: 10 }]}>{difficulty}</Text>
+        </View>
+  
+        <View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.text2}>Priority</Text>
+          <Slider
+            style={styles.slider}
+            value={priority}
+            minimumValue={1}
+            maximumValue={5}
+            step={1}
+            onValueChange={handleSliderChange2}
+            thumbStyle={{ height: 20, width: 20 }}
+          />
+          <Text style={[styles.input, { marginLeft: 10 }]}>{priority}</Text>
+        </View>
+
 
         <Input 
             style={styles.input}
@@ -166,12 +187,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   text2:{
-    fontSize: 15,
-    letterSpacing: 1,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 10,
-    justifyContent: 'center'
+    marginBottom: 3,
+    paddingHorizontal: 5,
+    fontSize: 16,
+    color: 'rgb(134, 147, 158)',
+    fontWeight: 'bold'
   },
   container: {
     flex: 1,
@@ -189,6 +209,7 @@ const styles = StyleSheet.create({
     // Adjust the height and font size to make the input smaller
     height: 30,
     fontSize: 14,
+    fontWeight: 'bold'
   },
   buttonContainer: {
     flex:1,
@@ -200,5 +221,9 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 10,
     width: 200,
+  },
+  slider: {
+    width: '60%',
+    height: 10
   },
 })
