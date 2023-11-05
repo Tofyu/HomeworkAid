@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, ImageBackground } from 'react-native'
-import React, {useState} from 'react'
-import {db} from '../firebase'
+import { StyleSheet, Text, View, ImageBackground, SafeAreaView } from 'react-native'
+import React, { useState } from 'react'
+import { auth, db } from '../firebase'
 import { Button, Input, Slider } from '@rneui/themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import firebase from "firebase/app";
 
-const AddHomeworkScreen = ( {navigation} ) => {
+const AddHomeworkScreen = ({ navigation }) => {
   const [title, setTitle] = useState('')
   const [dueDate, setDueDate] = useState(new Date())
   const [startDate, setStartDate] = useState(new Date())
@@ -16,29 +16,29 @@ const AddHomeworkScreen = ( {navigation} ) => {
   const [priority, setPriority] = useState('')
   const [note, setNote] = useState('')
 
-
+  const userID = auth.currentUser.uid;
 
   const addHomework = () => {
-    db.collection("users").doc("YEuRehNNhMMQdrsqGWyi").collection("homeworks").add({
-        title: title,
-        difficulty: difficulty,
-        startDate: firebase.firestore.Timestamp.fromDate(new Date(Date.parse(startDate))),
-        dueDate: firebase.firestore.Timestamp.fromDate(new Date(Date.parse(dueDate))),
-        type: type,
-        subject: subject,
-        timeNeeded: timeNeeded,
-        priority: priority,
-        note: note
+    db.collection("users").doc(userID).collection("homeworks").add({
+      title: title,
+      difficulty: difficulty,
+      startDate: firebase.firestore.Timestamp.fromDate(new Date(Date.parse(startDate))),
+      dueDate: firebase.firestore.Timestamp.fromDate(new Date(Date.parse(dueDate))),
+      type: type,
+      subject: subject,
+      timeNeeded: timeNeeded,
+      priority: priority,
+      note: note
 
     })
-    .then((docRef) => {
+      .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
         console.log("Added homework succesfully!")
         navigation.navigate('Home')
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         console.error("Error adding document: ", error);
-    });
+      });
   }
 
   const handleSliderChange = (value) => {
@@ -51,31 +51,28 @@ const AddHomeworkScreen = ( {navigation} ) => {
     setPriority(newPriority);
   };
 
+  return (
+    <SafeAreaView>
+      <View styles={styles.content}>
+        <Input
+          style={styles.input}
+          placeholder="[Enter Title]"
+          label="Title"
+          value={title}
+          onChangeText={setTitle}
+        />
 
-    return (
-      <ImageBackground source = {require('../assets/background_bottom.png')} resizeMode="cover" style= 
-    {{flex: 1, width: '100%', height:'100%'}}>
-        <View styles={styles.content}>
-          <Input
-           style={styles.input}
-            placeholder="[Enter Title]"
-            label="Title"
-            value = {title}
-            onChangeText = {setTitle}
-          />
-         
-         <Text style={styles.text2}> Start Date </Text>
-         <DateTimePicker
+        <Text style={styles.text2}> Start Date </Text>
+        <DateTimePicker
           testID="dateTimePicker"
           value={startDate}
           mode="date"
           is24Hour={true}
           display="default"
         />
-        
 
-         <Text style={styles.text2}> Due Date </Text>
-         <DateTimePicker
+        <Text style={styles.text2}> Due Date </Text>
+        <DateTimePicker
           testID="dateTimePicker"
           value={dueDate}
           mode="date"
@@ -84,30 +81,30 @@ const AddHomeworkScreen = ( {navigation} ) => {
         />
 
         <Input
-         style={styles.input}
-            placeholder="[Enter Type]"
-            label="Type"
-            value = {type}
-            onChangeText = {setType}
-          />
-          
-        <Input
-         style={styles.input}
-            placeholder="[Enter Subject]"
-            label="Subject"
-            value = {subject}
-            onChangeText = {setSubject}
-          />
+          style={styles.input}
+          placeholder="[Enter Type]"
+          label="Type"
+          value={type}
+          onChangeText={setType}
+        />
 
         <Input
-         style={styles.input}
-            placeholder="[Enter number of minutes needed]"
-            label="Time Needed"
-            value = {timeNeeded}
-            onChangeText = {setTimeNeeded}
-          />
+          style={styles.input}
+          placeholder="[Enter Subject]"
+          label="Subject"
+          value={subject}
+          onChangeText={setSubject}
+        />
 
-<View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Input
+          style={styles.input}
+          placeholder="[Enter number of minutes needed]"
+          label="Time Needed"
+          value={timeNeeded}
+          onChangeText={setTimeNeeded}
+        />
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.text2}>Difficulty</Text>
           <Slider
             style={styles.slider}
@@ -120,8 +117,8 @@ const AddHomeworkScreen = ( {navigation} ) => {
           />
           <Text style={[styles.input, { marginLeft: 10 }]}>{difficulty}</Text>
         </View>
-  
-        <View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.text2}>Priority</Text>
           <Slider
             style={styles.slider}
@@ -135,41 +132,40 @@ const AddHomeworkScreen = ( {navigation} ) => {
           <Text style={[styles.input, { marginLeft: 10 }]}>{priority}</Text>
         </View>
 
+        <Input
+          style={styles.input}
+          placeholder="[Any notes or reminders?]"
+          label="Notes"
+          value={note}
+          onChangeText={setNote}
+        />
 
-        <Input 
-            style={styles.input}
-            placeholder="[Any notes or reminders?]"
-            label="Notes"
-            value = {note}
-            onChangeText = {setNote}
-          />
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Add Homework"
+            buttonStyle={{ backgroundColor: 'rgba(39, 213, 245, 0.8)', borderRadius: 15 }}
+            titleStyle={{ fontWeight: 'bold', fontSize: 15 }}
+            icon={{ name: 'pencil-square', type: 'font-awesome', size: 15, color: 'white', }}
+            onPress={addHomework}
+            style={{ padding: 10, marginVertical: 5, width: 200 }} />
 
-          <View style={styles.buttonContainer}>
-          <Button 
-        title="Add Homework" 
-        buttonStyle={{ backgroundColor: 'rgba(39, 213, 245, 0.8)', borderRadius: 15 }} 
-        titleStyle={{ fontWeight: 'bold', fontSize: 15 }} 
-        icon={{name: 'pencil-square',type: 'font-awesome',size: 15,color: 'white',}}
-        onPress={addHomework} 
-        style={{ padding: 10, marginVertical: 5, width: 200 }} />
-
-<Button 
-        title="Cancel" 
-        buttonStyle={{ backgroundColor: 'rgba(39, 213, 245, 0.8)', borderRadius: 15 }} 
-        titleStyle={{ fontWeight: 'bold', fontSize: 15 }} 
-        icon={{name: 'arrow-circle-left',type: 'font-awesome',size: 15,color: 'white',}}
-        onPress={() => navigation.navigate('Home')}
-        style={{ padding: 10, marginVertical: 5, width: 200 }} />
-          </View>
+          <Button
+            title="Cancel"
+            buttonStyle={{ backgroundColor: 'rgba(39, 213, 245, 0.8)', borderRadius: 15 }}
+            titleStyle={{ fontWeight: 'bold', fontSize: 15 }}
+            icon={{ name: 'arrow-circle-left', type: 'font-awesome', size: 15, color: 'white', }}
+            onPress={() => navigation.navigate('Home')}
+            style={{ padding: 10, marginVertical: 5, width: 200 }} />
         </View>
-        </ImageBackground>
+      </View>
+    </SafeAreaView>
   )
 }
 
 export default AddHomeworkScreen
 
 const styles = StyleSheet.create({
-  title:{
+  title: {
     fontSize: 30,
     fontWeight: '700',
     letterSpacing: 2,
@@ -178,7 +174,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingBottom: 15
   },
-  text1:{
+  text1: {
     fontSize: 20,
     fontWeight: 'bold',
     letterSpacing: 1,
@@ -186,7 +182,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     justifyContent: 'center'
   },
-  text2:{
+  text2: {
     marginBottom: 3,
     paddingHorizontal: 5,
     fontSize: 16,
@@ -200,7 +196,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop:60,
+    marginTop: 60,
     paddingTop: 40,
     paddingHorizontal: 20,
   },
@@ -212,10 +208,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   buttonContainer: {
-    flex:1,
-    flexDirection:'row',
+    flex: 1,
+    flexDirection: 'row',
     marginTop: 20,
-    justifyContent:'space-around'
+    justifyContent: 'space-around'
 
   },
   button: {
