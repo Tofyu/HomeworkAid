@@ -5,11 +5,12 @@ import React, { useState, useEffect } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Button, Input } from "@rneui/themed";
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { db } from '../firebase'
+import { db, auth } from '../firebase'
 
 const HomeScreen = ({ navigation }) => {
     const colours = ['#d1f8ff', '#27d5f5',]
     const [filteredHW, setFilteredHW] = useState([])
+    const [filteredEvents, setFilteredEvents] = useState([])
     const [subjects, setSubjects] = useState([])
     const [HWFilter, setHWFilter] = useState("All")
     const [subjectFilter, setSubjectFilter] = useState("All")
@@ -21,16 +22,18 @@ const HomeScreen = ({ navigation }) => {
         {label: 'Homework', value: 'Homework', parent: 'AllCategory'},
         {label: 'Exam', value: 'Exam', parent: 'AllCategory'},
         {label: 'Project', value: 'Project', parent: 'AllCategory'},
-
         {label: 'All Subjects', value: 'AllSubject'},
        
     ]);
+    
+    const user = auth.currentUser;
 
     useEffect(() => {
         let homeworksFromDB = []
         let subjectsFromDB = []
+        let eventsFromDB = []
 
-        db.collection('users').doc('k4UBkks0q2pL5RtjZstY').collection('homeworks').onSnapshot((querySnapshot) => {
+        db.collection('users').doc(user.uid).collection('homeworks').onSnapshot((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 console.log("doc:")
                 console.log(doc.data())
@@ -51,6 +54,19 @@ const HomeScreen = ({ navigation }) => {
             console.log("subjects:")
             console.log(subjects)
         })
+
+        db.collection('users').doc(user.uid).collection('events').onSnapshot((querySnapshot) => {
+            console.log('Events:')
+            querySnapshot.forEach((doc) => {
+                console.log(doc.data())
+                let date = doc.data().eventStart.toDate()
+                if(date.getFullYear() === new Date().getFullYear && date.getMonth() === new Date().getMonth && date.getDate() === new Date().getDate()) {
+                    eventsFromDB.push({id: doc.id, ...doc.data()})
+                    console.log("Event added")
+                }
+                console.log("Event: ", doc.data().eventStart)
+            })
+        })
     }, [])
 
     useEffect(() => {
@@ -58,36 +74,65 @@ const HomeScreen = ({ navigation }) => {
         console.log(subjects)
     }, [subjects])
 
+    // useEffect(() => {
+    //     console.log("homeworks")
+    //     console.log(homeworks)
+    //     console.log("filtered:")
+    //     console.log(filteredHW)
+    // }, [filteredHW])
+
+    // useEffect(() => {
+    //     setFilteredHW(homeworks)
+    //     filter();
+    // }, [HWFilter, subjectFilter])
+
+    // const filter = () => {
+    //     if (HWFilter != "All")
+    //         setFilteredHW(homeworks.filter((item) => item.type == HWFilter))
+    //     if (subjectFilter != "All")
+    //         setFilteredHW(filteredHW.filter((item) => item.subject == subjectFilter))
+    // }
+
     useEffect(() => {
-        console.log("homeworks")
-        console.log(homeworks)
-        console.log("filtered:")
+        let toAdd = homeworks
+        setFilteredHW([])
+        for(let x = 0; x < toAdd.length; x++) {
+            for(let y = 0; y < value.length; y++) {
+                if(value[y] == 'AllCategory' || toAdd[x].type == value[y]) {
+                    setFilteredHW(...filteredHW, toAdd[x])
+                    toAdd.splice(x)
+                    x--;
+                    y = value.length;
+                }
+            }
+        }
+        console.log('val')
+        console.log(value)
+        console.log('\nfiltered')
         console.log(filteredHW)
-    }, [filteredHW])
+    }, [value])
 
-    useEffect(() => {
-        setFilteredHW(homeworks)
-        filter();
-    }, [HWFilter, subjectFilter])
-
-    const filter = () => {
-        if (HWFilter != "All")
-            setFilteredHW(homeworks.filter((item) => item.type == HWFilter))
-        if (subjectFilter != "All")
-            setFilteredHW(filteredHW.filter((item) => item.subject == subjectFilter))
+    const renderItem = ({ item, index }) => {
+        // <View style={{ backgroundColor: colours[index % colours.length], width: '100%' }}>
+        //     <Text style={styles.text1}>{item.title}</Text>
+        //     <Text style={styles.text2}>Type: {item.type}</Text>
+        //     <Text style={styles.text3}>Difficulty Level: {"*".repeat(item.difficulty)}</Text>
+        // </View>
+        let backgroundColor = { backgroundColor: colours[index % colours.length] }
+        return (
+            <View style={[styles.assignmentContainer, backgroundColor]}>
+                <Text style={styles.assignmentTitle}>{item.title}</Text>
+                <Text style={styles.text2}>Type: {item.type}</Text>
+                <Text style={styles.text3}>Difficulty Level: {"*".repeat(item.difficulty)}</Text>
+                <Text style={styles.assignmentDueDate}>
+                    Due on: {item.dueDate.toDate().toDateString()}
+                </Text>
+            </View>
+        )
     }
 
-    const renderItem = ({ item, index }) => (
-        <View style={{ backgroundColor: colours[index % colours.length], width: '100%' }}>
-            <Text style={styles.text1}>{item.title}</Text>
-            <Text style={styles.text2}>Type: {item.type}</Text>
-            <Text style={styles.text3}>Difficulty Level: {"*".repeat(item.difficulty)}</Text>
-        </View>
-    )
-
     return (
-        <ImageBackground source={require('../assets/background_bottom.png')} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }}>
-          <View style={{ flex: 1, paddingTop: 40, paddingHorizontal: 20 }}>
+        <View style={{ flex: 1, paddingTop: 40, paddingHorizontal: 20 }}>
             <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginVertical: 20, zIndex:2 }}>
               <DropDownPicker
                 open={open}
@@ -105,9 +150,10 @@ const HomeScreen = ({ navigation }) => {
                 <Icon name="plus" size={24} color="#FF6CB9" />
               </TouchableOpacity>
             </View>
-            <FlatList data={filteredHW} renderItem={renderItem} style={{zIndex:1}}></FlatList>
-          </View>
-        </ImageBackground>
+            <FlatList data={filteredHW} renderItem={renderItem} style={{zIndex:1}} />
+            <Text>Today's events</Text>
+            <FlatList data = {filteredEvents} renderItem = {renderItem} style = {{zIndex:1}} />
+        </View>
       );
 }
 
@@ -141,5 +187,12 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         justifyContent: 'center',
         paddingBottom: 5,
+    },
+    assignmentContainer: {
+        padding: 16,
+        borderWidth: 1,
+        borderColor: 'lightgray',
+        borderRadius: 8,
+        marginBottom: 16,
     },
 })
